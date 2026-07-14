@@ -82,7 +82,7 @@ def ask_gemini(user_prompt):
     for attempt in range(3):
         try:
             resp = client.models.generate_content(
-                model="gemini-flash-2.5",
+                model="gemini-2.5-flash",
                 contents=user_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
