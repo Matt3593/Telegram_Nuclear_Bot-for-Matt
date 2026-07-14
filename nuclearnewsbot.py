@@ -11,7 +11,7 @@ GEMINI_KEY = os.environ["GEMINI_KEY"]
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-keywords_en = ["nuclear power", "small modular reactor", "uranium", "U.S. nuclear", "U.S. NRC", "Nuclear Supply Chain", "Nuclear Financing"]
+keywords_en = ["nuclear power", "small modular reactor", "uranium", "U.S. nuclear", "U.S. NRC", "Nuclear Supply Chain", "Nuclear Financing", "Westinghouse", "AP1000", "Nuclear Construction", "Large PWR", "PWR Reactor"]
 HOURS = 12   # 1시간=1, 하루=24, 일주일=168
 
 # ===== 1) 뉴스 가져오기 (+ 최근 뉴스만 거르기) =====
@@ -58,7 +58,7 @@ for i, a in enumerate(articles, start=1):
     news_text += f"{i}. {a['title']}\n"
 
 prompt = f"""당신은 원자력·에너지 섹터를 담당하는 투자 애널리스트입니다.
-대규칙 1: 아래 뉴스 제목 목록에서 투자 판단에 중요한 순서대로 상위 6개를 골라 정렬하세요.
+대규칙 1: 아래 뉴스 제목 목록에서 투자 판단에 중요한 순서대로 상위 10개를 골라 정렬하세요.
 
 중요도 기준 (프롬프트 결과에서에 우선도 몇에 해당하는지를 굳이 언급할 필요는 없음):
 [우선도 1] 미국의 대형원전 신규 설치/사업 진행 (자금조달, 인허가, 부지확보)
