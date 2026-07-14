@@ -11,7 +11,6 @@ GEMINI_KEY = os.environ["GEMINI_KEY"]
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-keywords_ko = ["원전", "SMR", "우라늄"]
 keywords_en = ["nuclear power", "small modular reactor", "uranium", "U.S. nuclear", "U.S. NRC", "Nuclear Supply Chain", "Nuclear Financing"]
 HOURS = 12   # 1시간=1, 하루=24, 일주일=168
 
