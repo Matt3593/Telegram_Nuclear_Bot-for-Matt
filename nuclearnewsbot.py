@@ -54,6 +54,8 @@ if not articles:
 # ===== 2) Gemini에게 정렬·요약 =====
 client = genai.Client(api_key=GEMINI_KEY)
 
+articles = articles[:60]   # 최신 60개만 AI에 전달
+
 news_text = ""
 for i, a in enumerate(articles, start=1):
     news_text += f"{i}. {a['title']}\n"
@@ -79,15 +81,22 @@ prompt = f"""당신은 원자력·에너지 섹터를 담당하는 투자 애널
 """
 
 def ask_gemini(user_prompt):
-    resp = client.models.generate_content(
-        model="gemini-flash-latest",
-        contents=user_prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            thinking_config=types.ThinkingConfig(thinking_budget=0),
-        ),
-    )
-    return resp.text
+    last_error = None
+    for attempt in range(3):
+        try:
+            resp = client.models.generate_content(
+                model="gemini-flash-latest",
+                contents=user_prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    thinking_config=types.ThinkingConfig(thinking_budget=0),
+                ),
+            )
+            return resp.text
+        except Exception as e:
+            last_error = e
+            time.sleep(5)   # 5초 쉬었다 다시 시도
+    raise last_error
 
 def clean_json(text):
     text = text.strip()
