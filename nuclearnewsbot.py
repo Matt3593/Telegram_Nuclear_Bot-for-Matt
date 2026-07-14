@@ -41,7 +41,23 @@ print(f"최근 {HOURS}시간 이내 기사 {len(articles)}개를 찾았어요.")
 # ===== 텔레그램 전송 함수 =====
 def send_to_telegram(text):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    requests.post(url, data={"chat_id": CHAT_ID, "text": text, "disable_web_page_preview": True})
+    # 4000자 넘으면 줄 단위로 잘라서 여러 개로 나눠 보내기
+    chunks = []
+    current = ""
+    for line in text.split("\n"):
+        if len(current) + len(line) + 1 > 4000:
+            chunks.append(current)
+            current = ""
+        current += line + "\n"
+    if current.strip():
+        chunks.append(current)
+
+    for chunk in chunks:
+        r = requests.post(url, data={"chat_id": CHAT_ID, "text": chunk, "disable_web_page_preview": True})
+        # 텔레그램이 거부하면 로그에 이유를 찍기
+        if not r.ok:
+            print("텔레그램 전송 실패:", r.status_code, r.text)
+        time.sleep(1)
 
 if not articles:
     send_to_telegram(f"최근 {HOURS}시간 이내 원전·에너지 뉴스가 없습니다.")
