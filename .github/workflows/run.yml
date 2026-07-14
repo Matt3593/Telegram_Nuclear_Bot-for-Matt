@@ -2,11 +2,11 @@ name: nuclear news bot
 
 on:
   schedule:
-    - cron: "0 21 * * *"   # KST 06:00
-    - cron: "0 23 * * *"   # KST 08:00
-    - cron: "0 10 * * *"   # KST 19:00
-    - cron: "0 12 * * *"   # KST 21:00
-    - cron: "0 14 * * *"   # KST 23:00
+    - cron: "3 21 * * *"   # KST 06:00
+    - cron: "4 23 * * *"   # KST 08:00
+    - cron: "7 10 * * *"   # KST 19:00
+    - cron: "3 12 * * *"   # KST 21:00
+    - cron: "8 14 * * *"   # KST 23:00
   workflow_dispatch:
 
 jobs:
