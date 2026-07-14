@@ -82,7 +82,7 @@ def ask_gemini(user_prompt):
     for attempt in range(3):
         try:
             resp = client.models.generate_content(
-                model="gemini-flash-latest",
+                model="gemini-flash-2.5",
                 contents=user_prompt,
                 config=types.GenerateContentConfig(
                     response_mime_type="application/json",
@@ -92,7 +92,7 @@ def ask_gemini(user_prompt):
             return resp.text
         except Exception as e:
             last_error = e
-            time.sleep(5)   # 5초 쉬었다 다시 시도
+            time.sleep(120)   # 5초 쉬었다 다시 시도
     raise last_error
 
 def clean_json(text):
