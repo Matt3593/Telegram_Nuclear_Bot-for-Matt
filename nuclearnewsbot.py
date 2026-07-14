@@ -16,8 +16,6 @@ HOURS = 12   # 1시간=1, 하루=24, 일주일=168
 
 # ===== 1) 뉴스 가져오기 (+ 최근 뉴스만 거르기) =====
 feeds = []
-for kw in keywords_ko:
-    feeds.append(f"https://news.google.com/rss/search?q={urllib.parse.quote(kw)}&hl=ko&gl=KR&ceid=KR:ko")
 for kw in keywords_en:
     feeds.append(f"https://news.google.com/rss/search?q={urllib.parse.quote(kw)}&hl=en-US&gl=US&ceid=US:en")
 
