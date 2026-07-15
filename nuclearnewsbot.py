@@ -134,24 +134,6 @@ prompt = f"""당신은 원자력·에너지 섹터를 담당하는 투자 애널
 {news_text}
 """
 
-def ask_gemini(user_prompt):
-    last_error = None
-    for attempt in range(3):
-        try:
-            resp = client.models.generate_content(
-                model="gemini-3.5-flash",
-                contents=user_prompt,
-                config=types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    thinking_config=types.ThinkingConfig(thinking_budget=0),
-                ),
-            )
-            return resp.text
-        except Exception as e:
-            last_error = e
-            time.sleep(120)   # 5초 쉬었다 다시 시도
-    raise last_error
-
 def clean_json(text):
     text = text.strip()
     if text.startswith("```"):
