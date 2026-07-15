@@ -11,8 +11,8 @@ GEMINI_KEY = os.environ["GEMINI_KEY"]
 TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
-keywords_en = ["nuclear power", "small modular reactor", "uranium", "U.S. nuclear", "U.S. NRC", "Nuclear Supply Chain", "Nuclear Financing", "Westinghouse", "AP1000", "Nuclear Construction", "Large PWR", "PWR Reactor"]
-HOURS = 6   # 1시간=1, 하루=24, 일주일=168
+keywords_en = ["Large Nuclear Plant", "nuclear energy", "nuclear power", "small modular reactor", "uranium", "U.S. nuclear", "U.S. NRC", "Nuclear Supply Chain", "Nuclear Financing", "Westinghouse", "AP1000", "Nuclear Construction", "Large PWR", "PWR Reactor"]
+HOURS = 12   # 1시간=1, 하루=24, 일주일=168
 
 # ===== 1) 뉴스 가져오기 (+ 최근 뉴스만 거르기) =====
 feeds = []
