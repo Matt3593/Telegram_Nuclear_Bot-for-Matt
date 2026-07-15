@@ -12,7 +12,7 @@ TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 CHAT_ID = os.environ["CHAT_ID"]
 
 keywords_en = ["nuclear power", "small modular reactor", "uranium", "U.S. nuclear", "U.S. NRC", "Nuclear Supply Chain", "Nuclear Financing", "Westinghouse", "AP1000", "Nuclear Construction", "Large PWR", "PWR Reactor"]
-HOURS = 12   # 1시간=1, 하루=24, 일주일=168
+HOURS = 6   # 1시간=1, 하루=24, 일주일=168
 
 # ===== 1) 뉴스 가져오기 (+ 최근 뉴스만 거르기) =====
 feeds = []
@@ -65,9 +65,50 @@ if not articles:
     raise SystemExit
 
 # ===== 2) Gemini에게 정렬·요약 =====
-client = genai.Client(api_key=GEMINI_KEY)
+def ask_gemini(user_prompt):
+    retry_delays = [60]
+    last_error = None
 
-articles = articles[:60]   # 최신 60개만 AI에 전달
+    for attempt, delay in enumerate(retry_delays, start=1):
+        try:
+            print(f"Gemini 요청 시도 {attempt}/{len(retry_delays)}")
+
+            # 시도할 때마다 새 클라이언트 생성
+            with genai.Client(api_key=GEMINI_KEY) as retry_client:
+                resp = retry_client.models.generate_content(
+                    model="gemini-3.5-flash",
+                    contents=user_prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json",
+                        thinking_config=types.ThinkingConfig(
+                            thinking_budget=0
+                        ),
+                    ),
+                )
+
+            if not resp.text:
+                raise RuntimeError("Gemini가 빈 응답을 반환했습니다.")
+
+            return resp.text
+
+        except Exception as e:
+            last_error = e
+            print(
+                f"Gemini 요청 실패 "
+                f"({attempt}/{len(retry_delays)}): "
+                f"{type(e).__name__}: {e}"
+            )
+
+            # 마지막 시도 후에는 기다리지 않고 오류 발생
+            if attempt < len(retry_delays):
+                print(f"{delay}초 후 새 클라이언트로 재시도합니다.")
+                time.sleep(delay)
+
+    raise RuntimeError(
+        f"Gemini 요청이 {len(retry_delays)}회 모두 실패했습니다."
+    ) from last_error
+
+articles = articles[:40]   # 최신 40개만 AI에 전달
 
 news_text = ""
 for i, a in enumerate(articles, start=1):
